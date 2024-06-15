@@ -19,6 +19,7 @@ class ScraperFactory:
     def get_scraper(cls, url: str, strategy_service: StrategyService, repo) -> BaseScraper:
         logger.info(f"Getting scraper for URL: {url}")
         hostname = urlparse(url).hostname
+        logger.info(f"Getting scraper for hostname: {hostname}")
         config = strategy_service.get_strategy(hostname)
 
         if not config:

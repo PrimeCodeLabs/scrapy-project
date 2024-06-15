@@ -9,7 +9,7 @@ from app.services.scraping_service import ScrapingService
 from app.services.strategy_service import StrategyService
 from app.services.data_cleaning_service import DataCleaningService
 from app.core.use_cases.extract_data_use_case import ExtractDataUseCase
-from app.core.database.mongo_repository import MongoRepository, MongoStrategyRepository
+from app.core.repositories.mongo_repository import MongoRepository, MongoStrategyRepository
 from app.adapters.ocr.tesseract import TesseractOCR
 import os
 
