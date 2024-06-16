@@ -41,15 +41,13 @@ To start scraping a website, you need to define the scraping strategy and the re
 ### Example Command
 
 ```python
-from app.adapters.scraping import ScrapyScraper
-from app.repositories.mongo_repository import MongoRepository
-from app.services.strategy_service import StrategyService
+from lib.scraping import ScrapyScraper
+from lib.scraping_strategies import QuotesStrategy
+from lib.scraping_service import StrategyService
 
 url = 'https://quotes.toscrape.com'
-strategy_service = StrategyService()
-repository = MongoRepository(database='scraping_db', collection='scraping_collection')
-
-scraper = ScrapyScraper(strategy_service, repository)
+strategy = QuotesStrategy()
+scraper = ScrapyScraper(strategy, output_file='output.csv')
 data = scraper.scrape(url, max_pages=5)
 
 print(data)
@@ -57,11 +55,16 @@ print(data)
 
 ## Project Structure
 
-- **app/adapters/scraping.py**: Contains the `ScrapyScraper` class and the `ScrapySpider` class.
-- **app/adapters/scraping_strategies.py**: Contains the custom scraping strategies.
-- **app/repositories/mongo_repository.py**: Contains the repository implementation for MongoDB.
-- **app/services/strategy_service.py**: Service for retrieving the appropriate scraping strategy.
-- **app/adapters/base_scraper.py**: Base class for scrapers.
+- **cli.py**: Entry point for command-line interactions.
+- **docker-compose.yml**: Docker configuration file.
+- **lib/base_scraper.py**: Base class for scrapers.
+- **lib/scraper_factory.py**: Factory for creating scrapers.
+- **lib/scraping.py**: Contains the `ScrapyScraper` class and the `ScrapySpider` class.
+- **lib/scraping_service.py**: Service for managing scraping tasks.
+- **lib/scraping_strategies.py**: Contains the custom scraping strategies.
+- **lib/strategy_service.py**: Service for retrieving the appropriate scraping strategy.
+- **requirements.txt**: List of required dependencies.
+- **saasworthy.csv**: Output file for scraped data.
 
 ## Custom Strategies
 
@@ -71,7 +74,7 @@ You can define custom strategies for different websites by inheriting from `Base
 
 ```python
 import logging
-from app.adapters.base_scraper import BaseStrategy
+from lib.base_scraper import BaseStrategy
 
 logger = logging.getLogger(__name__)
 
