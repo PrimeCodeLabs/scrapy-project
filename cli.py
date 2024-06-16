@@ -1,25 +1,10 @@
-import sys
-import os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), 'api'))
-
 import click
 import logging
-from app.adapters.scraping import ScrapyScraper
-from app.core.repositories.mongo_repository import MongoStrategyRepository
-from app.core.repositories.csv_repository import CsvRepository
-from app.adapters.scraper_factory import ScraperFactory
-from app.services.scraping_service import ScrapingService
-from app.services.strategy_service import StrategyService
-from app.core.use_cases.manage_strategies_use_case import ManageStrategiesUseCase
+from lib.scraper_factory import ScraperFactory
+from lib.scraping_service import ScrapingService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-mongo_strategy_repo = MongoStrategyRepository(os.getenv('MONGO_URI'), 'scraping_db')
-strategy_service = StrategyService(mongo_strategy_repo)
-
-
 
 
 @click.group()
@@ -33,9 +18,8 @@ def cli():
 @click.option('--file_path', default="./output", help='The path of the file with scraped data.')
 def scrape(url, max_pages, file_path):
     """Scrape the given URL."""
-    repository = CsvRepository(file_path)
-    scraper = ScraperFactory.get_scraper(url, ManageStrategiesUseCase(mongo_strategy_repo), repository)
-    scraping_service = ScrapingService(scraper, repository)
+    scraper = ScraperFactory.get_scraper(url, file_path)
+    scraping_service = ScrapingService(scraper)
     
     try:
         data = scraping_service.scrape(url, max_pages)
