@@ -18,6 +18,7 @@ def cli():
 @click.option('--file_path', default="./output", help='The path of the file with scraped data.')
 def scrape(url, max_pages, file_path):
     """Scrape the given URL."""
+    logger.info(f"Scraping URL: {url}")
     scraper = ScraperFactory.get_scraper(url, file_path)
     scraping_service = ScrapingService(scraper)
     
